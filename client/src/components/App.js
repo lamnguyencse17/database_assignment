@@ -1,9 +1,16 @@
 import React, {Component, Fragment} from 'react';
 import ReactDOM from 'react-dom';
+import Headnav from './Headnav/Headnav';
+import Body from './Body/Body';
 
 class App extends Component {
     render() {
-        return (<Fragment><h1>Hello how are you</h1></Fragment>)
+        return (
+            <Fragment>
+                <Headnav/>
+                <Body/>
+            </Fragment>
+            )
     }
 }
 

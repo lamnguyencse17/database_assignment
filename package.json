@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/lamnguyencse17/database_assignment#readme",
   "dependencies": {
+    "concurrently": "^5.0.0",
     "express": "^4.17.1",
     "moment": "^2.24.0",
     "nodemon": "^1.19.4",

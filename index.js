@@ -3,7 +3,10 @@ const path = require('path');
 
 const app = express();
 
-app.use('/api/applicants', require('./routes/api/members'));
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+
+app.use('/api/applicants', require('./routes/api/applicants'));
 
 const PORT = process.env.PORT || 5000;
 

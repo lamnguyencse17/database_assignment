@@ -4,7 +4,6 @@ import Button from 'react-bootstrap/Button';
 import SearchForm from './SearchForm.js';
 import Cards from "./Cards.js";
 
-
 class Body extends Component {
   render() {
     return (

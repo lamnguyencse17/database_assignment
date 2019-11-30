@@ -1,3 +1,4 @@
 import {combineReducers} from 'redux';
+import jobs from './jobs';
 
-export default combineReducers({});
+export default combineReducers({jobs});

@@ -1,0 +1,2 @@
+export const REGISTER_PROCESS = "REGISTER_PROCESS";
+export const LOGIN_PROCESS = "LOGIN_PROCESS";

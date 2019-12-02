@@ -4,6 +4,10 @@ import Nav from "react-bootstrap/Nav";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import {connect} from 'react-redux';
+import PropTypes from "prop-types";
+import {bindActionCreators} from "redux";
+import {registerProcess, loginProcess} from "../../actions/account"
 
 class Headnav extends Component {
   constructor(props) {
@@ -26,9 +30,9 @@ class Headnav extends Component {
   }
   handleSubmission() {
     if (this.state.register == true) {
-      console.log("register");
+      this.props.registerProcess(this.state.email, this.state.password);
     } else {
-      console.log("login");
+      this.props.loginProcess(this.state.email, this.state.password);
     }
   }
   render() {
@@ -115,4 +119,15 @@ class Headnav extends Component {
   }
 }
 
-export default Headnav;
+function mapStateToProps(state){
+  return {
+    email: state.account.email,
+    token: state.account.token
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({registerProcess}, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Headnav);

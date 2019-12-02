@@ -1,4 +1,4 @@
-import {combineReducers} from 'redux';
-import jobs from './jobs';
+import { combineReducers } from "redux";
+import applicant from "./applicant";
 
-export default combineReducers({jobs});
+export default combineReducers({ applicant });

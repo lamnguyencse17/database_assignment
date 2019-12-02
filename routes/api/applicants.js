@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const sql = require("mssql");
 
+
 const config = {
   user: "sa",
   password: "miumap3008MM,",
@@ -21,27 +22,6 @@ router.get("/", (req, res) => {
     } else {
       fetchData(connection).then(list => {
         res.status(200).json(list["recordset"]);
-      });
-    }
-  });
-});
-
-// Create a new applicant
-router.post("/", (req, res) => {
-  connection.connect(err => {
-    if (err) {
-      connection.close();
-    } else {
-      applicant = {
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password
-      };
-      createSingle(connection, applicant).then(result => {
-        res.status(200).json({
-          message: result,
-          applicant,
-        });
       });
     }
   });
@@ -150,31 +130,6 @@ const fetchSingle = async (conn, id) => {
       .request()
       .input("id", sql.Int, parseInt(id))
       .query("Select * from applicant Where applicant_ID = @id");
-    conn.close();
-    return result;
-  } catch (e) {
-    throw e;
-  }
-};
-
-const createSingle = async (conn, applicant) => {
-  email = applicant["email"].toString();
-  name = applicant["name"];
-  password = applicant["password"];
-  let id = await conn.query("select count(*) from applicant");
-  id = await parseInt(id['rowsAffected'][0])
-  try {
-    let command =
-      "insert into applicant (applicant_ID, applicant_name, applicant_email) values(" +
-      id.toString() +
-      ",'" +
-      name +
-      "','" +
-      email +
-      "','" +
-      password 
-      "')";
-    let result = await conn.query(command);
     conn.close();
     return result;
   } catch (e) {

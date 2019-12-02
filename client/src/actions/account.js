@@ -5,7 +5,7 @@ import { REGISTER_PROCESS, LOGIN_PROCESS } from "./types";
 export const registerProcess = (email, password) => dispatch => {
   axios
     .post(
-      "127.0.0.1:5000/api/applicants",
+      "127.0.0.1:5000/api/auth/register",
       {
         email: email,
         password: password,
@@ -25,7 +25,7 @@ export const registerProcess = (email, password) => dispatch => {
 export const loginProcess = (email, password) => dispatch => {
   axios
     .post(
-      "127.0.0.1:5000/api/auth",
+      "127.0.0.1:5000/api/auth/login",
       {
         email: email,
         password: password,

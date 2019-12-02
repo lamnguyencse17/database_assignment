@@ -4,10 +4,11 @@ import Nav from "react-bootstrap/Nav";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import {bindActionCreators} from "redux";
-import {registerProcess, loginProcess} from "../../actions/account"
+import { bindActionCreators } from "redux";
+import { registerProcess, loginProcess } from "../../actions/account";
+import { displayHome } from "../../actions/control";
 
 class Headnav extends Component {
   constructor(props) {
@@ -34,6 +35,10 @@ class Headnav extends Component {
     } else {
       this.props.loginProcess(this.state.email, this.state.password);
     }
+    this.setState(state => ({
+      register: false,
+      login: false,
+    }));
   }
   render() {
     return (
@@ -43,7 +48,9 @@ class Headnav extends Component {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-              <Nav.Link href="#home">Home</Nav.Link>
+              <Nav.Link href="#home" onClick={() => this.props.displayHome()}>
+                Home
+              </Nav.Link>
               <Nav.Link href="#jobs">All Jobs</Nav.Link>
               <Nav.Link href="#companies">Companies</Nav.Link>
               <Nav.Link href="#blog">Blogs</Nav.Link>
@@ -119,15 +126,18 @@ class Headnav extends Component {
   }
 }
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
   return {
     email: state.account.email,
-    token: state.account.token
-  }
+    token: state.account.token,
+  };
 }
 
-function mapDispatchToProps(dispatch){
-  return bindActionCreators({registerProcess}, dispatch);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    { registerProcess, loginProcess, displayHome },
+    dispatch
+  );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Headnav);

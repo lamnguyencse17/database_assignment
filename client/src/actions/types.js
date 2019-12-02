@@ -1,2 +1,5 @@
 export const REGISTER_PROCESS = "REGISTER_PROCESS";
 export const LOGIN_PROCESS = "LOGIN_PROCESS";
+export const MAIN_SEARCH = "MAIN_SEARCH";
+export const SEARCH_DISPLAY = "SEARCH_DISPLAY";
+export const HOME_DISPLAY = "HOME_DISPLAY"

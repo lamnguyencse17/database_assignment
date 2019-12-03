@@ -4,6 +4,7 @@ import Cards from "./Cards.js";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
+import Results from "./Results.js";
 
 class Body extends Component {
   render() {
@@ -28,7 +29,17 @@ class Body extends Component {
           </div>
           <div className="col"></div>
         </div>
-        {this.props.search ? <h1>SEARCH</h1> : <Cards />}
+        {this.props.search ? (
+          <div className="row" style={{ width: "100%" }}>
+            <div className="col"></div>
+            <div className="col-6">
+              <Results />
+            </div>
+            <div className="col"></div>
+          </div>
+        ) : (
+          <Cards />
+        )}
       </div>
     );
   }

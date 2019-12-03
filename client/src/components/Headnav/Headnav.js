@@ -66,7 +66,7 @@ class Headnav extends Component {
                 )}
               </Modal.Header>
               <Modal.Body>
-                <Form>
+              <Form>
                   <Form.Group controlId="formSignup">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control

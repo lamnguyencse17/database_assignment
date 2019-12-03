@@ -10,7 +10,7 @@ class Cards extends Component {
             <div className="col-3"></div>
             <div className="col-2">
                 <Card style={{ width: '18rem' }}>
-                    <Card.Img variant="top" src="holder.js/100px180" />
+                    <Card.Img variant="top"/>
                     <Card.Body>
                         <Card.Title>Card Title</Card.Title>
                         <Card.Text>
@@ -22,7 +22,7 @@ class Cards extends Component {
                 </Card>
                 <br></br>
                 <Card style={{ width: '18rem' }}>
-                    <Card.Img variant="top" src="holder.js/100px180" />
+                    <Card.Img variant="top"/>
                     <Card.Body>
                         <Card.Title>Card Title</Card.Title>
                         <Card.Text>
@@ -34,7 +34,7 @@ class Cards extends Component {
                 </Card>
                 <br></br>
                 <Card style={{ width: '18rem' }}>
-                    <Card.Img variant="top" src="holder.js/100px180" />
+                    <Card.Img variant="top"/>
                     <Card.Body>
                         <Card.Title>Card Title</Card.Title>
                         <Card.Text>

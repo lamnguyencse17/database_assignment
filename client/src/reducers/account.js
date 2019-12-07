@@ -1,8 +1,8 @@
-import { REGISTER_PROCESS, LOGIN_PROCESS } from "../actions/types";
+import { REGISTER_PROCESS, LOGIN_PROCESS, TOKEN_CHECK } from "../actions/types";
 
 const initialState = {
   email: "",
-  token: "",
+  token: localStorage.getItem('token'),
 };
 
 export default function(state = initialState, action) {
@@ -10,8 +10,15 @@ export default function(state = initialState, action) {
     default:
       return state;
     case REGISTER_PROCESS:
-      return { email: action.payload.email, token: action.payload.token };
+      localStorage.setItem('token', action.payload.token)
+      return { ...state, email: action.payload.email};
     case LOGIN_PROCESS:
-      return { email: action.payload.email, token: action.payload.token };
+      localStorage.setItem('token', action.payload.token)
+      return { email: action.payload.email};
+    case TOKEN_CHECK:
+      if (!action.payload){
+        localStorage.removeItem('token');
+      }
+      return state;
   }
 }

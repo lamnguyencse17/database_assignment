@@ -6,6 +6,14 @@ import {searchProcess} from "../../actions/search";
 import {displaySearch} from "../../actions/control";
 import {connect} from 'react-redux';
 import PropTypes from "prop-types";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams,
+  useRouteMatch,
+} from "react-router-dom";
 
 class SearchForm extends Component {
   constructor(props){
@@ -25,7 +33,7 @@ class SearchForm extends Component {
     return (
                 <Form inline>
                     <Form.Control type="text" name="term" onChange={this.handleChange.bind(this)} placeholder="Type in to search" className="mr-sm-2" style={{"width": "88%"}}/>
-                    <Button variant="outline-primary" onClick={() => this.handleSearch()}>Search</Button>
+                    <Button variant="outline-primary" onClick={() => this.handleSearch()}><Link to="/results">Search</Link></Button>
                 </Form>
     );
   }

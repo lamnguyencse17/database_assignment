@@ -5,14 +5,22 @@ import ReactDOM from 'react-dom';
 
 import Headnav from './Headnav/Headnav';
 import Body from './Body/Body';
+import {
+    HashRouter as Router,
+    Switch,
+    Route,
+    Link,
+    useParams,
+    useRouteMatch,
+  } from "react-router-dom";
 
 class App extends Component {
     render() {
         return (<Provider store={store}>
-            <Fragment>
+            <Router>
                 <Headnav/>
-                <Body/>
-            </Fragment>
+                <Body/>          
+            </Router>
             </Provider>
             )
     }

@@ -8,7 +8,15 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 import { registerProcess, loginProcess } from "../../actions/account";
-import { displayHome } from "../../actions/control";
+import { displayHome, displayJobs } from "../../actions/control";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams,
+  useRouteMatch,
+} from "react-router-dom";
 
 class Headnav extends Component {
   constructor(props) {
@@ -44,16 +52,25 @@ class Headnav extends Component {
     return (
       <div className="container-fluid" style={{ padding: 0 }}>
         <Navbar bg="dark" expand="lg" variant="dark">
-          <Navbar.Brand href="#home">IT Source</Navbar.Brand>
+          <Link to="/">
+            <Navbar.Brand> IT Source</Navbar.Brand>
+          </Link>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-              <Nav.Link href="#home" onClick={() => this.props.displayHome()}>
-                Home
-              </Nav.Link>
-              <Nav.Link href="#jobs">All Jobs</Nav.Link>
-              <Nav.Link href="#companies">Companies</Nav.Link>
-              <Nav.Link href="#blog">Blogs</Nav.Link>
+              <Nav onClick={() => this.props.displayHome()}>
+                <Link className="nav-link" to="/">
+                  Home
+                </Link>
+              </Nav>
+              <Nav onClick={() => this.props.displayJobs()}>
+                <Link className="nav-link" to="/jobs">
+                  All Jobs
+                </Link>
+              </Nav>
+
+              <Nav><Link className="nav-link" to="/companies">Companies</Link></Nav>
+              <Nav><Link className="nav-link" to="/blogs">Blogs</Link></Nav>
             </Nav>
             <Modal
               show={this.state.register || this.state.login}
@@ -66,7 +83,7 @@ class Headnav extends Component {
                 )}
               </Modal.Header>
               <Modal.Body>
-              <Form>
+                <Form>
                   <Form.Group controlId="formSignup">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control
@@ -99,26 +116,36 @@ class Headnav extends Component {
                 </Button>
               </Modal.Footer>
             </Modal>
-            <Nav>
-              <Nav.Link
-                href="#signup"
-                onClick={() => {
-                  this.setState(state => ({
-                    register: true,
-                  }));
-                }}>
-                Sign Up Now
-              </Nav.Link>
-              <Nav.Link
-                href="#login"
-                onClick={() => {
-                  this.setState(state => ({
-                    login: true,
-                  }));
-                }}>
-                Login
-              </Nav.Link>
-            </Nav>
+            {this.props.login ? (
+              <Nav>
+                <Nav><Link className="nav-link" to="/profile">Profile</Link></Nav>
+                <Nav><Link className="nav-link" to="/signout">Sign Out</Link></Nav>
+              </Nav>
+            ) : (
+              <Nav>
+                <Nav
+                  onClick={() => {
+                    this.setState(state => ({
+                      register: true,
+                    }));
+                  }}>
+                    <Link className="nav-link" to="/signup">
+                  Sign Up Now
+                  </Link>
+                </Nav>
+                <Nav
+                  href="#login"
+                  onClick={() => {
+                    this.setState(state => ({
+                      login: true,
+                    }));
+                  }}>
+                    <Link className="nav-link" to="/login">
+                  Login
+                  </Link>
+                </Nav>
+              </Nav>
+            )}
           </Navbar.Collapse>
         </Navbar>
       </div>
@@ -130,12 +157,13 @@ function mapStateToProps(state) {
   return {
     email: state.account.email,
     token: state.account.token,
+    login: state.control.login,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-    { registerProcess, loginProcess, displayHome },
+    { registerProcess, loginProcess, displayHome, displayJobs },
     dispatch
   );
 }

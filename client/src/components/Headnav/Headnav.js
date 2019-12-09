@@ -16,6 +16,8 @@ import {
   Link,
   useParams,
   useRouteMatch,
+  Redirect,
+  withRouter,
 } from "react-router-dom";
 
 class Headnav extends Component {
@@ -40,6 +42,10 @@ class Headnav extends Component {
   handleSubmission() {
     if (this.state.register == true) {
       this.props.registerProcess(this.state.email, this.state.password);
+      this.props.history.push({
+        pathname: "/account/update",
+        state: { login: true },
+      });
     } else {
       this.props.loginProcess(this.state.email, this.state.password);
     }
@@ -69,8 +75,16 @@ class Headnav extends Component {
                 </Link>
               </Nav>
 
-              <Nav><Link className="nav-link" to="/companies">Companies</Link></Nav>
-              <Nav><Link className="nav-link" to="/blogs">Blogs</Link></Nav>
+              <Nav>
+                <Link className="nav-link" to="/companies">
+                  Companies
+                </Link>
+              </Nav>
+              <Nav>
+                <Link className="nav-link" to="/posts">
+                  Posts
+                </Link>
+              </Nav>
             </Nav>
             <Modal
               show={this.state.register || this.state.login}
@@ -109,17 +123,35 @@ class Headnav extends Component {
                   onClick={this.handleClose.bind(this)}>
                   Close
                 </Button>
-                <Button
-                  variant="primary"
-                  onClick={this.handleSubmission.bind(this)}>
-                  Submit
-                </Button>
+                {this.state.login ? (
+                  <Link to="/">
+                    <Button
+                      variant="primary"
+                      onClick={this.handleSubmission.bind(this)}>
+                      Submit
+                    </Button>
+                  </Link>
+                ) : (
+                  <Button
+                    variant="primary"
+                    onClick={this.handleSubmission.bind(this)}>
+                    Submit
+                  </Button>
+                )}
               </Modal.Footer>
             </Modal>
             {this.props.login ? (
               <Nav>
-                <Nav><Link className="nav-link" to="/profile">Profile</Link></Nav>
-                <Nav><Link className="nav-link" to="/signout">Sign Out</Link></Nav>
+                <Nav>
+                  <Link className="nav-link" to="/profile">
+                    Profile
+                  </Link>
+                </Nav>
+                <Nav>
+                  <Link className="nav-link" to="/signout">
+                    Sign Out
+                  </Link>
+                </Nav>
               </Nav>
             ) : (
               <Nav>
@@ -129,8 +161,8 @@ class Headnav extends Component {
                       register: true,
                     }));
                   }}>
-                    <Link className="nav-link" to="/signup">
-                  Sign Up Now
+                  <Link className="nav-link" to="/signup">
+                    Sign Up Now
                   </Link>
                 </Nav>
                 <Nav
@@ -140,8 +172,8 @@ class Headnav extends Component {
                       login: true,
                     }));
                   }}>
-                    <Link className="nav-link" to="/login">
-                  Login
+                  <Link className="nav-link" to="/login">
+                    Login
                   </Link>
                 </Nav>
               </Nav>
@@ -168,4 +200,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Headnav);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Headnav)
+);

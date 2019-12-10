@@ -5,6 +5,7 @@ import { bindActionCreators } from "redux";
 import InputGroup from "react-bootstrap/InputGroup"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
+import { updateAccount } from "../../../../actions/account";
 import {
   BrowserRouter as Router,
   Switch,
@@ -19,11 +20,14 @@ class Settings extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      name: "",
+      blog: "",
+      password: ""
+    };
   }
   handleUpdate() {
-    // this.props.updateAccount(this.props.id, this.state.name, this.state.blog, "")
-    console.log("then")
+    this.props.updateAccount(this.props.id, this.state.name, this.state.blog, this.state.password)
   }
   render() {
     return (
@@ -67,7 +71,9 @@ class Settings extends Component {
     );
   }
 }
-
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ updateAccount }, dispatch);
+}
 function mapStateToProps(state) {
   return {
     login: state.control.login,
@@ -76,4 +82,4 @@ function mapStateToProps(state) {
     email: state.account.email
   };
 }
-export default withRouter(connect(mapStateToProps, null)(Settings));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Settings));

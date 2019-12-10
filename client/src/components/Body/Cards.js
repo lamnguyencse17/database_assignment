@@ -12,11 +12,11 @@ import {
   Link,
   useParams,
   useRouteMatch,
+  withRouter
 } from "react-router-dom";
 class Cards extends Component {
   handleCompanyClick(e) {}
   componentDidMount() {
-    this.props.getJobs(6);
   }
   render() {
     return (
@@ -32,7 +32,7 @@ class Cards extends Component {
                     <Card.Title key={index}>{job.name}</Card.Title>
                     <Card.Text>{job.description}</Card.Text>
                     <Card.Text>{job.salary}</Card.Text>
-                    <Link to={`/job/${job.id}`}>
+                    <Link to={{pathname: `/company/${job.id}`, state: {id: job.id}}}>
                       <Button variant="primary">Go somewhere</Button>
                     </Link>
                   </Card.Body>
@@ -52,7 +52,7 @@ class Cards extends Component {
                       <Card.Title key={index}>{job.name}</Card.Title>
                       <Card.Text>{job.description}</Card.Text>
                       <Card.Text>{job.salary}</Card.Text>
-                      <Link to={`/job/${job.id}`}>
+                      <Link to={{pathname: `/company/${job.id}`, state: {id: job.id}}}>
                         <Button variant="primary">Go somewhere</Button>
                       </Link>
                     </Card.Body>
@@ -72,7 +72,7 @@ class Cards extends Component {
                     <Card.Title key={index}>{job.name}</Card.Title>
                     <Card.Text>{job.description}</Card.Text>
                     <Card.Text>{job.salary}</Card.Text>
-                    <Link to={`/company/${job.id}`}>
+                    <Link to={{pathname: `/company/${job.id}`, state: {id: job.id}}}> 
                       <Button variant="primary">Go somewhere</Button>
                     </Link>
                   </Card.Body>
@@ -97,4 +97,4 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ getJobs }, dispatch);
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Cards);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Cards));

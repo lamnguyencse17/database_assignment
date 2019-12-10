@@ -9,3 +9,7 @@ export const UPDATE_LOGIN = "UPDATE_LOGIN";
 export const JOBS_DISPLAY = "JOB_DISPLAY";
 export const GET_JOBS = "GET_JOBS";
 export const UPDATE_ACCOUNT = "UPDATE_ACCOUNT";
+export const GET_SINGLE_JOB = "GET_SINGLE_JOB";
+
+export const GET_SINGLE_COMPANY = "GET_SINGLE_COMPANY"
+export const ADD_CV = "ADD_CV"

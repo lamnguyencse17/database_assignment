@@ -5,6 +5,7 @@ import {
   LOGIN_PROCESS,
   TOKEN_CHECK,
   UPDATE_LOGIN,
+  ADD_CV,
 } from "./types";
 
 export const registerProcess = (email, password) => dispatch => {
@@ -91,3 +92,27 @@ export const updateAccount = (id, name, blog, password) => {
     })
     .catch(err => console.log(err));
 };
+
+export const addCv = (id, cv) => {
+  url = "127.0.0.1/api/cv/";
+  axios
+    .post(
+      url,
+      {
+        id: id, //Owner
+        email: cv.email,
+        phone: cv.phone,
+        skill: cv.skill,
+        job_target: cv.job_target,
+        education: [], //ID goes here
+        experience: [],
+        document: [],
+      },
+      { headers: { "Content-Type": "application/json", Authorization: token } }
+    )
+    .then(res => {
+      dispatch({ type: ADD_CV, payload: res.data }); //all cv of id owner
+    }).catch(err => console.log(err))
+};
+
+export const deleteCv = id => {};

@@ -1,18 +1,37 @@
 import React, { Component, Fragment } from "react";
 import Button from "react-bootstrap/Button";
-export default class Company extends Component {
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams,
+  useRouteMatch,
+  Redirect,
+  withRouter,
+} from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { bindActionCreators } from "redux";
+import { getSingleCompany } from "../../../actions/company";
+ class Company extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {};
+    this.state = {
+      id: this.props.location.pathname.split("/")[2]
+    };
+  }
+  componentDidMount(){
+    this.props.getSingleCompany(this.state.id)
   }
   handleReview() {
-    console.log("Hello");
+    
   }
   render() {
     return (
+      <Router>
       <Fragment>
-        <div className="row" style={{ paddingBottom: "2%" }}>
+        <div className="row" style={{ paddingBottom: "2%"}}>
           <div className="col"></div>
           <div className="col-9">
             <div
@@ -28,7 +47,7 @@ export default class Company extends Component {
                   <p></p>
                   <Button
                     variant="outline-primary"
-                    onClick={() => this.handleReview.bind(this)}>
+                    onClick={this.handleReview.bind(this)}>
                     Add a review
                   </Button>
                 </div>
@@ -82,6 +101,16 @@ export default class Company extends Component {
           <div className="col"></div>
         </div>
       </Fragment>
+      </Router>
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    company: state.company.company,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ getSingleCompany }, dispatch);
+}
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Company));

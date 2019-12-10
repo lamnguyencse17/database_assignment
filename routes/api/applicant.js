@@ -9,7 +9,6 @@ const config = {
   server: "ZODIACULTRA",
   database: "assignment",
 };
-
 let connection = new sql.ConnectionPool(config);
 let request = new sql.Request(connection);
 
@@ -53,19 +52,31 @@ router.get("/:id", (req, res) => {
 // Update an applicant password online
 router.put("/:id", (req, res) => {
   id = req.params.id;
-  let password = req.body.password;
-  let email = req.body.email
   connection.connect(err => {
     if (err) {
       res.status(400).json({message: "Can't connect to the server"});
       connection.close();
     } else {
-      updateData(connection, password, email).then(result => {
-        res.status(200).json({message: result});
-      }).catch(e => {
-        res.status(400).json({message: e});
-      })
-    }
+      fetchSingle(connection, id)
+        .then(applicant => {
+          password = req.body.password? req.body.password : applicant.applicant_password;
+          blog  = req.body.blog? req.body.blog : applicant.applicant_blog;
+          name  = req.body.name? req.body.name : applicant.applicant_name;
+        }).then(()=>{
+          connection.connect(err => {
+            if (err) {
+              res.status(400).json({message: "Can't connect to the server"});
+              connection.close();
+            } else {
+              updateData(connection,id, password, blog, name).then(result => {
+                res.status(200).json({message: result});
+              }).catch(e => {
+              res.status(400).json({message: e});
+              })
+            }
+          })
+        })
+      }
   })
 })
 
@@ -89,15 +100,41 @@ router.delete("/:id", (req, res) => {
 
 
 // Help Functions
-const updateData = async (conn,password, email) => {
+
+//TODO: CHECK TOKEN
+const updateData = async (conn,id,password, blog, name) => {
   try {
-    command = "update applicants set applicant_password='" + password + "' where applicant_email = '" + email + "'";
-    let result = await conn.query(command);
-    conn.close();
+    let command1 =
+      "update applicant set applicant_password = '" +
+      password +
+      "'   where applicant_ID = '" +
+      id +
+      "'";
+    let command2 =
+      "update applicant set applicant_blog = '" +
+      blog +
+      "' where applicant_ID = '" +
+      id +
+      "'";
+    let command3 =
+      "update applicant set applicant_name = '" +
+      name +
+      "' where applicant_ID = '" +
+      id +
+      "'";
+    conn.query(command1).then(() => {
+      conn.query(command2).then(() => {
+        conn.query(command3).then(() => {
+          conn.close();
+        });
+      });
+    });
+    
+    
   } catch (e){
     console.log(e);
-    conn.close();
     throw(e);
+    
   }
 }
 
@@ -108,7 +145,6 @@ const deleteData = async conn => {
     }
     catch (e){
       console.log(e)
-      conn.close()
       throw(e)
     }
 }
@@ -130,6 +166,8 @@ const fetchSingle = async (conn, id) => {
       .request()
       .input("id", sql.Int, parseInt(id))
       .query("Select * from applicant Where applicant_ID = @id");
+    
+    
     conn.close();
     return result;
   } catch (e) {

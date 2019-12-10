@@ -4,8 +4,8 @@ const sql = require("mssql");
 
 const config = {
   user: "sa",
-  password: "123456",
-  server: "DESKTOP-7I9O2BS\\TCTTSERVER",
+  password: "miumap3008MM,",
+  server: "ZODIACULTRA",
   database: "assignment",
 };
 
@@ -28,14 +28,18 @@ router.get("/",  (req,res) => {
 
 router.get("/:id", (req, res) => {
     id = req.params.id;
+    
     connection.connect(err => {
       if (err) {
         connection.close();
       } else {
+        
         fetchSingle(connection, id)
-          .then(jobs => {
-            if (jobs["recordset"].length != 0) {
-              res.status(200).json(jobs["recordset"][0]);
+          .then(result => {
+            if (result.job["recordset"].length != 0) {
+              result.job["recordset"][0].company = result.company["recordset"][0]
+              res.status(200).json(result.job["recordset"][0]);
+
             } else {
               res.status(400).json({ message: "No such ID in database" });
             }
@@ -65,12 +69,36 @@ const fetchJobs = async (conn, term) => {
   module.exports = router;
 
   const fetchSingle = async (conn, id) => {
+    
     try {
       let result = await conn
         .request()
         .input("id", sql.Int, parseInt(id))
-        .query("Select * from job Where job_ID = @id");
-      conn.close();
+        .query("Select * from job Where job_ID = @id")
+        try{
+          command = "Select * from company  where company_ID like '" + result["recordset"][0].company_ID +"'";
+          result2 = await conn.query(command)
+          
+        }
+        catch (er) {
+          throw er;
+        }
+            
+        conn.close();
+      return {job: result, company: result2};
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  const fetchCompany = async (conn, id) => {
+    
+    try {
+      let result = await conn
+        .request()
+        .input("id", sql.Int, parseInt(id))
+        .query("Select * from company Where company_ID = @id")
+        conn.close();
       return result;
     } catch (e) {
       throw e;

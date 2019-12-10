@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const sql = require("mssql");
 
+
 const config = {
   user: "sa",
   password: "miumap3008MM,",
@@ -47,56 +48,61 @@ router.get("/:id", (req, res) => {
   });
 });
 
+
 // Update an applicant password online
 router.put("/:id", (req, res) => {
   id = req.params.id;
   connection.connect(err => {
     if (err) {
-      res.status(400).json(err);
+      res.status(400).json({message: "Can't connect to the server"});
       connection.close();
     } else {
       fetchSingle(connection, id)
         .then(applicant => {
-          password = req.body.password
-            ? req.body.password
-            : applicant.applicant_password;
-          blog = req.body.blog ? req.body.blog : applicant.applicant_blog;
-          name = req.body.name ? req.body.name : applicant.applicant_name;
+          password = req.body.password? req.body.password : applicant.applicant_password;
+          blog  = req.body.blog? req.body.blog : applicant.applicant_blog;
+          name  = req.body.name? req.body.name : applicant.applicant_name;
+        }).then(()=>{
+          connection.connect(err => {
+            if (err) {
+              res.status(400).json({message: "Can't connect to the server"});
+              connection.close();
+            } else {
+              updateData(connection,id, password, blog, name).then(result => {
+                res.status(200).json({message: result});
+              }).catch(e => {
+              res.status(400).json({message: e});
+              })
+            }
+          })
         })
-        .then(() => {
-          updateData(connection, id, password, blog, name)
-            .then(result => {
-              res.status(200).json({ message: result });
-            })
-            .catch(e => {
-              res.status(400).json({ message: e });
-            });
-        });
-    }
-  });
-});
+      }
+  })
+})
 
 // Delete an applicant
 router.delete("/:id", (req, res) => {
   id = req.params.id;
   connection.connect(err => {
     if (err) {
-      res.status(400).json({ message: "Can't connect to the server" });
+      res.status(400).json({message: "Can't connect to the server"});
       connection.close();
     } else {
-      deleteData(connection)
-        .then(result => {
-          res.status(200).json({ message: result });
-        })
-        .catch(e => {
-          res.status(400).json({ message: e });
-        });
+      deleteData(connection).then(result => {
+        res.status(200).json({message: result});
+      }).catch(e => {
+        res.status(400).json({message: e});
+      });
     }
-  });
-});
+})});
+
+
+
 
 // Help Functions
-const updateData = async (conn, id, password, blog, name) => {
+
+//TODO: CHECK TOKEN
+const updateData = async (conn,id,password, blog, name) => {
   try {
     let command1 =
       "update applicant set applicant_password = '" +
@@ -123,24 +129,25 @@ const updateData = async (conn, id, password, blog, name) => {
         });
       });
     });
-  } catch (e) {
+    
+    
+  } catch (e){
     console.log(e);
-    throw e;
+    throw(e);
+    
   }
-};
+}
 
 const deleteData = async conn => {
   try {
-    let result = await conn
-      .request()
-      .input("id", sql.Int, parseInt(id))
-      .query("delete from applicant where applicant_ID = @id");
-    conn.close();
-  } catch (e) {
-    console.log(e);
-    throw e;
-  }
-};
+    let result = await conn.request().input("id", sql.Int, parseInt(id)).query("delete from applicant where applicant_ID = @id");
+    conn.close()
+    }
+    catch (e){
+      console.log(e)
+      throw(e)
+    }
+}
 
 const fetchData = async conn => {
   try {
@@ -159,7 +166,8 @@ const fetchSingle = async (conn, id) => {
       .request()
       .input("id", sql.Int, parseInt(id))
       .query("Select * from applicant Where applicant_ID = @id");
-
+    
+    
     conn.close();
     return result;
   } catch (e) {

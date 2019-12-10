@@ -4,7 +4,7 @@
   "description": "Implenmentation of database into real application",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon index"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,10 @@
   "dependencies": {
     "concurrently": "^5.0.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
+    "mssql": "^6.0.1",
+    "mysql": "^2.17.1",
     "nodemon": "^1.19.4",
     "tedious": "^6.6.2"
   }
